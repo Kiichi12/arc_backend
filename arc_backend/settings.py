@@ -120,6 +120,15 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google' : {
+        'APP' : {
+            'client_id' : 'your-google-client-id',
+            'secret' :'YOUR_GOOGLE_SECRET',
+        }
+    }
+}
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
