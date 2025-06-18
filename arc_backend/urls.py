@@ -21,5 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/', include('dj_rest_auth.urls')),
     path('api/auth/register', include('dj_rest_auth.registration.urls')),
+    path('api/users/', include('users.urls')),
     # path('api/', include('your_app.urls')),
 ]
