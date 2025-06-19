@@ -140,9 +140,9 @@ def add_comment(request, id):
 @permission_classes([IsAuthenticated])
 def delete_comment(request, id):
     try:
-        comment = Comment.objects.get(id=id)
+        comment = Comment.objects.get(id=id, user=request.user)
     except Comment.DoesNotExist:
-        return Response({'error': 'Comment does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Comment does not exist or is unauthorized'}, status=status.HTTP_404_NOT_FOUND)
     
     comment.delete()
     return Response({'message': 'Comment deleted succesfully'}, status=status.HTTP_200_OK)
@@ -273,6 +273,9 @@ def get_all_files(request):
 @permission_classes([IsAuthenticated])
 def update_file_status(request, id):
     status_value = request.data.get("status")
+
+    if request.user.role != 'admin':
+        return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
 
     if status_value not in ['Accepted', 'Pending', 'Rejected']:
         return Response({'error': 'Invalid status use either of [Accepted, Pending, Rejected]'}, status=status.HTTP_400_BAD_REQUEST)

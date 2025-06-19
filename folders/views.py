@@ -13,9 +13,13 @@ def create_folder(request):
     name = request.data.get("name")
     parent_id = request.data.get("parent_id")
 
+    if request.user.role != 'admin':
+        return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+
     if not name:
         return Response({'error': "Folder name is required"}, status=status.HTTP_400_BAD_REQUEST)
     
+    name = name.strip()
     parent = None
     if parent_id:
         try:
@@ -38,6 +42,9 @@ def create_folder(request):
 @permission_classes([IsAuthenticated])
 def delete_folder(request, id):
 
+    if request.user.role != 'admin':
+        return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+
     if not id:
         return Response({'error': 'Folder id is required'}, status=status.HTTP_400_BAD_REQUEST)
     
@@ -55,12 +62,16 @@ def delete_folder(request, id):
 def rename_folder(request, id):
     name = request.data.get("name")
 
+    if request.user.role != 'admin':
+        return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+
     if not id:
         return Response({'error': 'Folder id is not provided'}, status=status.HTTP_400_BAD_REQUEST)
 
     if not name:
         return Response({'error': 'New name is not provided'}, status=status.HTTP_400_BAD_REQUEST)
     
+    name = name.strip()
     try:
         folder = Folder.objects.get(id=id, owner=request.user)
     except Folder.DoesNotExist:
