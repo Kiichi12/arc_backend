@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from forums.models import Forum, Reply
+from .utils import ForumPagination, ReplyPagination
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -77,6 +78,9 @@ def get_forum(request, id):
         return Response({"error": "Forum does not exist"}, status=status.HTTP_404_NOT_FOUND)
     
     replies = Reply.objects.filter(forum=forum)
+    paginator = ReplyPagination()
+    result_reply_data = paginator.paginate_queryset(replies, request)
+
     reply_data = [
         {
             "id": reply.id,
@@ -87,10 +91,10 @@ def get_forum(request, id):
                 "username": reply.posted_by.username,
                 "email": reply.posted_by.email
             }
-        } for reply in replies
+        } for reply in result_reply_data
     ]
 
-    return Response({
+    forum_data = {
         "id": forum.id,
         "topic": forum.topic,
         "started_by": {
@@ -99,8 +103,12 @@ def get_forum(request, id):
             "email": forum.started_by.email
         },
         "started_at": forum.started_at,
-        "replies": reply_data
-    }, status=status.HTTP_200_OK)
+    }
+
+    paginated_response = paginator.get_paginated_response(reply_data)
+    paginated_response.data.update(forum_data)
+    
+    return paginated_response
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
@@ -129,11 +137,14 @@ def delete_reply(request, id):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_all_forums(request):
-    
+    paginator = ForumPagination()
     forums = Forum.objects.filter().order_by('-started_at')
 
+    result_page = paginator.paginate_queryset(forums, request)
+
     forum_data = []
-    for forum in forums:
+
+    for forum in result_page:
         forum_data.append({
             "id": forum.id,
             "topic": forum.topic,
@@ -145,4 +156,4 @@ def get_all_forums(request):
             "started_at": forum.started_at
         })
 
-    return Response(forum_data, status=status.HTTP_200_OK)
+    return paginator.get_paginated_response(forum_data)
