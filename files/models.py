@@ -57,3 +57,12 @@ class FileTags(models.Model):
     class Meta:
         db_table = 'file_tags'
         unique_together = ('file', 'tag')
+
+class UserViewed(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    file = models.ForeignKey(File, on_delete=models.CASCADE)
+    opened_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'user_viewed'
+        

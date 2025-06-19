@@ -16,9 +16,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.conf import settings
+from django.conf.urls.static import static
+
+@api_view(["GET"])
+def say_hello(request):
+    return Response({'message': "Hello world"}, status=200)
 
 urlpatterns = [
+    path("", say_hello),
     path('admin/', admin.site.urls),
     path('api/users/', include('users.urls')),
-    # path('api/', include('your_app.urls')),
-]
+    path('api/folders/', include('folders.urls')),
+    path('api/forums/', include('forums.urls')),
+    path('api/favourites/', include('favourites.urls')),
+    path('api/files/', include('files.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
