@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'allauth',         # Django Allauth for user authentication
     'allauth.account', # Django Allauth account management
     'dj_rest_auth.registration',
-    'django.contrib.sites',
+    # 'django.contrib.sites',
     'allauth.socialaccount', # Django Allauth social account management
     'allauth.socialaccount.providers.google', # Google provider for Allauth
     'allauth.socialaccount.providers.github', # GitHub provider for Allauth
@@ -53,6 +53,9 @@ INSTALLED_APPS = [
     'core',
     'analytics',
     'api',
+    'files',
+    'folders',
+    'forums'
 ]
 
 MIDDLEWARE = [
@@ -176,3 +179,6 @@ REST_FRAMEWORK = {
 ACCOUNT_EMAIL_VERIFICATION = 'none'  # skip email verification for dev
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_REQUIRED = False
+
+
+# token 354868a58604cbab3b4d17c1b9351c2f5d26d4c3
