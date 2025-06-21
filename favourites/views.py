@@ -61,22 +61,21 @@ def remove_from_favourites(request, id):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_favourites(request, id, folder_id=None, file_type=None, sort_by=None):
-    # try:
-    #     user = User.get(id=id)
-    # except File.DoesNotExist:
-    #     return Response({'error': 'File not found'}, status=status.HTTP_404_NOT_FOUND)
-    try:
-        user = User.objects.get(id=id)
-    except User.DoesNotExist:
-        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+def get_favourites(request):
 
-    favourites = Favourites.objects.filter(user=user)
-    if folder_id:
-        favourites = favourites.filter(file__parent__id=folder_id)
-    
+    user = request.user
+    file_type = request.data.get('file_type', None)
+    sort_by = request.data.get('sort_by', None)
+    if user:
+        favourites = Favourites.objects.filter(user=user)
+    else:
+        return Response({'error': 'User not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+    if not favourites.exists():
+        return Response({'message': 'No favourites found'}, status=status.HTTP_404_NOT_FOUND)
+
     if file_type:
         favourites = favourites.filter(file__mime_type=file_type)
+    
     if sort_by:
         if sort_by == 'name':
             favourites = favourites.order_by('file__name')

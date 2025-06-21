@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
     path("add/<int:id>/", views.add_to_favourites, name="add_to_favourites"),
     path("remove/<int:id>/", views.remove_from_favourites, name="remove_from_favourites"),
-    path("get_favourites/<int:id>/<int:floder_id>/<str:mime_type>/<str:sort_by>", views.get_favourites, name="get_favourites")
+    path("get_favourites/<int:id>/<int:folder_id>/<str:mime_type>/<str:sort_by>", views.get_favourites, name="get_favourites")
 ]
 
 # get_favourites - get all favourites

@@ -2,6 +2,7 @@ from django.db import models
 from users.models import User
 from folders.models import Folder
 from folders.models import user_directory_path
+from django.utils import timezone
 
 class File(models.Model):
 
@@ -20,7 +21,7 @@ class File(models.Model):
     description = models.TextField(null=True, blank=True)
     open_count = models.IntegerField(default=0)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -57,3 +58,12 @@ class FileTags(models.Model):
     class Meta:
         db_table = 'file_tags'
         unique_together = ('file', 'tag')
+
+class UserViewed(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    file = models.ForeignKey(File, on_delete=models.CASCADE)
+    opened_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'user_viewed'
+        

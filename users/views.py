@@ -37,3 +37,43 @@ def login_view(request):
 def logout_view(request):
     request.user.auth_token.delete()
     return Response({'message': "Logged Out"})
+
+@api_view(['GET'])
+def user_view(request):
+    try:
+        user = User.objects.get(id=request.user.id)
+        return Response({
+            'id': user.id,
+            'username': user.username,
+            'email': user.email
+        }, status = 200)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)
+
+@api_view(['PUT', 'PATCH'])
+def update_user_view(request, id):
+    try:
+        user = User.objects.get(id=id)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status = 404)
+    if request.method == 'PUT' or request.method == 'PATCH':
+        if request.user.id != user.id:
+            return Response({'error': 'You do not have permission to update this user'}, status=403)
+        username = request.data.get("username")
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        if username:
+            user.username = username
+        if email:
+            user.email = email
+        if password:
+            user.set_password(password)
+        user.save()
+        return Response({
+            'id': user.id,
+            'username': user.username,
+            'email': user.email
+        }, status=200)
+    else:
+        return Response({'error': 'Method not allowed'}, status=405)
