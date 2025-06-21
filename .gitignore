@@ -1,3 +1,87 @@
+# Byte-compiled / optimized / DLL files
 __pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual environments
+env/
+venv/
+ENV/
+.venv/
+.env/
+
+# pipenv
+Pipfile.lock
+
+# Poetry
+poetry.lock
+
+# Django migrations (optional to ignore these — use with care)
+**/migrations/*.pyc
+**/migrations/__pycache__/
+*initial.py
+# If you want to ignore auto-generated migrations (not usually recommended)
+**/migrations/*.py
+
+# Static files (can be generated during deployment)
+staticfiles/
+static/
 media/
-*_initial.py
+
+# Django secret keys or sensitive files
+.env
+.env.*
+
+# Database
+*.sqlite3
+
+# Log files
+*.log
+
+# VSCode and other editors/IDEs
+.vscode/
+.idea/
+*.swp
+
+# macOS
+.DS_Store
+
+# PyCharm
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Coverage reports
+htmlcov/
+.coverage
+.tox/
+.nox/
+
+# pytest
+.cache/
+
+# mypy
+.mypy_cache/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Sphinx documentation
+docs/_build/
+
+# Test output
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+hypothesis.json
+
+# Others
+*.bak
+*.tmp
+*.orig
