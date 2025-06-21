@@ -24,7 +24,7 @@ poetry.lock
 **/migrations/__pycache__/
 *initial.py
 # If you want to ignore auto-generated migrations (not usually recommended)
-**/migrations/*.py
+# **/migrations/*.py
 
 # Static files (can be generated during deployment)
 staticfiles/
